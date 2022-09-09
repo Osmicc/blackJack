@@ -83,8 +83,11 @@ public class BlackJack extends  GraphicsProgram{
     private void wager(){
         wager = Dialog.getDouble("");
         wagerLabel.setLabel("Wager: "+wager);
-        balance -= wager;
-        balanceLabel.setLabel("Balance: "+ balance);
+
+     balance -= wager;
+     balanceLabel.setLabel("Balance: "+ balance);
+
+
     }
 
     public void play(){
@@ -99,6 +102,7 @@ public class BlackJack extends  GraphicsProgram{
     }
 
     private void stay(){
+
         dealerHand.flipCard(0);
         while(dealerHand.getTotal() < 17){
             dealerHand.hit();
@@ -109,9 +113,11 @@ public class BlackJack extends  GraphicsProgram{
             lose();
         }
 
+
     }
 
     private void hit(){
+
         if(playerHand.getTotal() <21) {
             playerHand.hit();
         }
@@ -139,6 +145,9 @@ public class BlackJack extends  GraphicsProgram{
         // reset for next round
                 
         deck.shuffle();
+
+        playerHand.hit();
+
     }
 
     @Override
