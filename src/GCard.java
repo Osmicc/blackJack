@@ -12,7 +12,9 @@ public class GCard extends GCompound{
 
     public void flip(){
         card.flip();
+
         this.back.setVisible(!this.back.isVisible());
+
     }
 
     public boolean getFaceUp(){
@@ -35,6 +37,7 @@ public class GCard extends GCompound{
         GRect border = new GRect(109, 152);
 
         add(border);
+
 
         back = new GRect(107, 150);
 
