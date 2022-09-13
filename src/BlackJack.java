@@ -138,6 +138,11 @@ public class BlackJack extends  GraphicsProgram{
         bankLabel.setLabel("Bank: "+ bank);
         wager = 0;
 
+
+        if(balance <= 0){
+            System.exit(0);
+        }
+
         remove(playerHand);
         remove(dealerHand);
 
@@ -151,6 +156,11 @@ public class BlackJack extends  GraphicsProgram{
         balanceLabel.setLabel("Balance: "+ balance);
 
         wager =0;
+
+        if(bank <= 0){
+            Dialog.showMessage("You won!");
+            System.exit(0);
+        }
 
         // reset for next round
                 
