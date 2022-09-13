@@ -28,11 +28,9 @@ public class BlackJack extends  GraphicsProgram{
     @Override
     public void init() {
 
-        deck = new Deck();
-        dealerHand = new GHand(new Hand(deck, true));
-        playerHand = new GHand(new Hand(deck, false));
 
-        this.setBackground(Color.lightGray);
+
+        this.setBackground(new Color(46, 187, 109));
 
         playButton = new JButton("Play");
         hitButton = new JButton("Hit");
@@ -91,6 +89,10 @@ public class BlackJack extends  GraphicsProgram{
     }
 
     public void play(){
+        deck = new Deck();
+        dealerHand = new GHand(new Hand(deck, true));
+        playerHand = new GHand(new Hand(deck, false));
+
         // setting the buttons as visible
         hitButton.setVisible(true);
         stayButton.setVisible(true);
@@ -110,6 +112,8 @@ public class BlackJack extends  GraphicsProgram{
         if(dealerHand.getTotal() < playerHand.getTotal()){
             win();
         } else if(playerHand.getTotal() < dealerHand.getTotal()){
+            lose();
+        } else if (playerHand.getTotal() == dealerHand.getTotal()){
             lose();
         }
 
@@ -132,6 +136,10 @@ public class BlackJack extends  GraphicsProgram{
         Dialog.showMessage("get ratio'd loser");
         bank += wager;
         bankLabel.setLabel("Bank: "+ bank);
+        wager = 0;
+
+        remove(playerHand);
+        remove(dealerHand);
 
     }
 
@@ -142,17 +150,16 @@ public class BlackJack extends  GraphicsProgram{
         bankLabel.setLabel("Bank: "+ bank);
         balanceLabel.setLabel("Balance: "+ balance);
 
+        wager =0;
+
         // reset for next round
                 
         deck.shuffle();
 
         playerHand.hit();
 
-    }
-
-    @Override
-    public void run() {
-
+        remove(playerHand);
+        remove(dealerHand);
     }
 
     public static void main(String[] args) {
