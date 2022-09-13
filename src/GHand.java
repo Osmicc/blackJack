@@ -18,7 +18,7 @@ public class GHand extends GCompound {
             GCard gcard = new GCard(card);
 
             // add the gcard to the compound
-            add(gcard, i * (gcard.getWidth()*1.25), 0);
+            add(gcard, i * (gcard.getWidth()*.25), 0);
 
             // store the GCard in the array
             gcards[i] = gcard;

@@ -21,46 +21,63 @@ public class BlackJack extends  GraphicsProgram{
     private GLabel balanceLabel;
 
     // buttons for controls
-    private JButton wagerButton, playButton, hitButton, stayButton, quitButton;
+    private JButton wagerButton, playButton, hitButton, stayButton;
 
     private GHand playerHand;
     private GHand dealerHand;
 
     public GImage logo;
+    public GImage cts;
 
     @Override
     public void init() {
 
         logo = new GImage("logo.png");
         add(logo, getWidth()/2-logo.getWidth()/2, 50);
+        // The font beneath blackjack that says press any key to start
+        GImage cts = new GImage("clicktostart.png");
+        cts.scale(.25);
+        add(cts, getWidth()/2-cts.getWidth()/2, 200);
 
-        this.setBackground(new Color(46, 187, 109));
+        Runnable newThread = new Runnable(){
+            public void run(){
+            while(logo.getY() == 50){
+                cts.setVisible(false);
+                pause(500);
+                cts.setVisible(true);
+                pause(500);
+            }
+                cts.setVisible(false);
+            }
+        };
+
+        this.setBackground(new Color(117, 40, 40));
 
         playButton = new JButton("Play");
         hitButton = new JButton("Hit");
         stayButton = new JButton("Stay");
-        quitButton = new JButton("Quit");
 
         add(playButton, SOUTH);
         add(hitButton, SOUTH);
         hitButton.setVisible(false);
         add(stayButton, SOUTH);
         stayButton.setVisible(false);
-        add(quitButton, SOUTH);
         addActionListeners();
 
         bankLabel = new GLabel("Bank: "+ bank);
+        bankLabel.setVisible(false);
         add(bankLabel, 10, 20);
 
         wagerLabel = new GLabel("Wager: "+wager);
+        wagerLabel.setVisible(false);
         add(wagerLabel, 100, 20);
 
         balanceLabel = new GLabel("Bank: "+ bank);
+        balanceLabel.setVisible(false);
         add(balanceLabel, 200, 20);
 
         this.getMenuBar().setVisible(false);
-
-
+        newThread.run();
     }
 
     public void actionPerformed(ActionEvent ae){
@@ -70,9 +87,6 @@ public class BlackJack extends  GraphicsProgram{
                 break;
             case "Stay":
                 stay();
-                break;
-            case "Quit":
-                System.exit(0);
                 break;
             case "Hit":
                 hit();
@@ -93,6 +107,11 @@ public class BlackJack extends  GraphicsProgram{
     }
 
     public void play(){
+        if(logo.getY() != 1) {
+            logo.setLocation(1, 1);
+            logo.scale(.5);
+        }
+
         deck = new Deck();
         dealerHand = new GHand(new Hand(deck, true));
         playerHand = new GHand(new Hand(deck, false));
@@ -177,6 +196,7 @@ public class BlackJack extends  GraphicsProgram{
         remove(playerHand);
         remove(dealerHand);
     }
+
 
     public static void main(String[] args) {
         new BlackJack().start();
