@@ -36,12 +36,19 @@ public class GCard extends GCompound{
 
         GRect border = new GRect(109, 152);
 
+        Color color = new Color(62, 137, 183);
+
+        border.setColor(color);
+        border.setFillColor(color);
+        border.setFilled(false);
+
         add(border);
 
 
         back = new GRect(107, 150);
 
-        back.setFillColor(Color.black);
+        back.setFillColor(color);
+        back.setColor(color);
         back.setFilled(true);
 
         add(back, 1, 1);

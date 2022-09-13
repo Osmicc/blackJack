@@ -1,3 +1,4 @@
+import acm.graphics.GImage;
 import acm.graphics.GLabel;
 import acm.program.GraphicsProgram;
 import svu.csc213.Dialog;
@@ -25,10 +26,13 @@ public class BlackJack extends  GraphicsProgram{
     private GHand playerHand;
     private GHand dealerHand;
 
+    public GImage logo;
+
     @Override
     public void init() {
 
-
+        logo = new GImage("logo.png");
+        add(logo, getWidth()/2-logo.getWidth()/2, 50);
 
         this.setBackground(new Color(46, 187, 109));
 
@@ -101,6 +105,8 @@ public class BlackJack extends  GraphicsProgram{
         // making the dealers hand
         add(playerHand, 100, 250);
         add(dealerHand, 100, 100);
+        remove(logo);
+
     }
 
     private void stay(){
