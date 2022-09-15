@@ -48,7 +48,7 @@ public class GHand extends GCompound {
         gcards[hand.getCount()-1] = gcard;
 
         // add the new gcard to the compound
-        add(gcard, (hand.getCount()-1) * (gcard.getWidth()*1.25), 0);
+        add(gcard, (hand.getCount()-1) * (gcard.getWidth()*.25), 0);
     }
 
 }

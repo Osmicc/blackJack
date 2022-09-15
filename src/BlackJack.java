@@ -1,16 +1,20 @@
 import acm.graphics.GImage;
 import acm.graphics.GLabel;
+import acm.graphics.GRect;
 import acm.program.GraphicsProgram;
 import svu.csc213.Dialog;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import static java.awt.MouseInfo.getPointerInfo;
 
 public class BlackJack extends  GraphicsProgram{
 
     // data about the game
-    private double wager = 0;
-    private float balance = 10000;
+    private int wager = 0;
+    private int balance = 10000;
     private int bank = 10000;
 
     // objects we are playing with
@@ -32,6 +36,15 @@ public class BlackJack extends  GraphicsProgram{
     @Override
     public void init() {
 
+
+        // a gross workaround don't look at this
+        GRect rect = new GRect(getWidth(), getHeight());
+        rect.setColor(new Color(117, 40, 40));
+        rect.setFillColor(new Color(117, 40, 40));
+        rect.setFilled(true);
+        add(rect, 0, 0);
+        rect.addMouseListener(this);
+
         logo = new GImage("logo.png");
         add(logo, getWidth()/2-logo.getWidth()/2, 50);
         // The font beneath blackjack that says press any key to start
@@ -42,16 +55,32 @@ public class BlackJack extends  GraphicsProgram{
         Runnable newThread = new Runnable(){
             public void run(){
             while(logo.getY() == 50){
+                pause(500);
                 cts.setVisible(false);
                 pause(500);
                 cts.setVisible(true);
-                pause(500);
+
             }
                 cts.setVisible(false);
             }
         };
 
         this.setBackground(new Color(117, 40, 40));
+
+        bankLabel = new GLabel("Bank: "+ bank);
+        add(bankLabel, 650, 20);
+        bankLabel.setVisible(false);
+        bankLabel.sendToFront();
+
+        wagerLabel = new GLabel("Wager: "+wager);
+        add(wagerLabel, 650, 35);
+        wagerLabel.sendToFront();
+        wagerLabel.setVisible(false);
+
+        balanceLabel = new GLabel("Balance: "+ balance);
+        add(balanceLabel, 650, 50);
+        bankLabel.sendToFront();
+        balanceLabel.setVisible(false);
 
         playButton = new JButton("Play");
         hitButton = new JButton("Hit");
@@ -62,22 +91,17 @@ public class BlackJack extends  GraphicsProgram{
         hitButton.setVisible(false);
         add(stayButton, SOUTH);
         stayButton.setVisible(false);
+
         addActionListeners();
 
-        bankLabel = new GLabel("Bank: "+ bank);
-        bankLabel.setVisible(false);
-        add(bankLabel, 10, 20);
 
-        wagerLabel = new GLabel("Wager: "+wager);
-        wagerLabel.setVisible(false);
-        add(wagerLabel, 100, 20);
-
-        balanceLabel = new GLabel("Bank: "+ bank);
-        balanceLabel.setVisible(false);
-        add(balanceLabel, 200, 20);
 
         this.getMenuBar().setVisible(false);
         newThread.run();
+    }
+
+    public void mouseClicked(MouseEvent e){
+        setBackground(Color.white);
     }
 
     public void actionPerformed(ActionEvent ae){
@@ -97,7 +121,7 @@ public class BlackJack extends  GraphicsProgram{
     }
 
     private void wager(){
-        wager = Dialog.getDouble("");
+        wager = Dialog.getInteger("What's your wager");
         wagerLabel.setLabel("Wager: "+wager);
 
      balance -= wager;
@@ -107,9 +131,13 @@ public class BlackJack extends  GraphicsProgram{
     }
 
     public void play(){
+        bankLabel.setVisible(true);
+        balanceLabel.setVisible(true);
+        wagerLabel.setVisible(true);
+
         if(logo.getY() != 1) {
             logo.setLocation(1, 1);
-            logo.scale(.5);
+            logo.scale(.33);
         }
 
         deck = new Deck();
@@ -120,11 +148,17 @@ public class BlackJack extends  GraphicsProgram{
         hitButton.setVisible(true);
         stayButton.setVisible(true);
 
-        wager();
-        // making the dealers hand
         add(playerHand, 100, 250);
         add(dealerHand, 100, 100);
-        remove(logo);
+
+
+
+
+
+        wager();
+        // making the dealers hand
+
+
 
     }
 
@@ -136,7 +170,10 @@ public class BlackJack extends  GraphicsProgram{
         }
         if(dealerHand.getTotal() < playerHand.getTotal()){
             win();
-        } else if(playerHand.getTotal() < dealerHand.getTotal()){
+        } else if(dealerHand.getTotal()> 21){
+            lose();
+        }
+        if(playerHand.getTotal() < dealerHand.getTotal()){
             lose();
         } else if (playerHand.getTotal() == dealerHand.getTotal()){
             lose();
@@ -162,7 +199,7 @@ public class BlackJack extends  GraphicsProgram{
         bank += wager;
         bankLabel.setLabel("Bank: "+ bank);
         wager = 0;
-
+        wagerLabel.setLabel("Wager: "+wager);
 
         if(balance <= 0){
             System.exit(0);
@@ -181,6 +218,7 @@ public class BlackJack extends  GraphicsProgram{
         balanceLabel.setLabel("Balance: "+ balance);
 
         wager =0;
+        wagerLabel.setLabel("Wager: "+wager);
 
         if(bank <= 0){
             Dialog.showMessage("You won!");
@@ -197,8 +235,13 @@ public class BlackJack extends  GraphicsProgram{
         remove(dealerHand);
     }
 
+    @Override
+    public void run() {
+
+    }
 
     public static void main(String[] args) {
         new BlackJack().start();
+
     }
 }
